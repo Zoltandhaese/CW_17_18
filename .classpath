@@ -7,5 +7,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/usr/local/Cellar/opencv/3.3.0_3/share/OpenCV/java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="last.lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="last.lwjgl.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
