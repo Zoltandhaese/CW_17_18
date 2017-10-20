@@ -44,20 +44,17 @@ public class Beeldherkenning {
         image.put(0, 0, data);
         
       //Maak images aan
-        Mat blurredImage = new Mat();
         Mat hsvImage = new Mat();
         Mat mask = new Mat();
         
-
-        displayImage( Mat2BufferedImage(image));
         
       //convert the frame to HSV
-        Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
-        displayImage( Mat2BufferedImage(blurredImage));
+        Imgproc.cvtColor(image, hsvImage, Imgproc.COLOR_BGR2HSV);
+        displayImage( Mat2BufferedImage(image));
         
       //Zoek kleur tussen deze ranges (rood)
-        Scalar minValues = new Scalar(0,0,0);
-        Scalar maxValues = new Scalar(180,255,250);
+        Scalar minValues = new Scalar(0,100,100);
+        Scalar maxValues = new Scalar(10,255,255);
         Core.inRange(hsvImage, minValues, maxValues, mask);
         
         List<MatOfPoint> contours = new ArrayList<>();
@@ -71,36 +68,30 @@ public class Beeldherkenning {
                 for (int i = 0; i >= 0; i = (int) hierarchy.get(0, i)[0])
                 {
                 		//Teken de contouren in blauw
-                        Imgproc.drawContours(blurredImage, contours, i, new Scalar(255, 0, 0));
+                        Imgproc.drawContours(image, contours, i, new Scalar(255, 0, 0));
                         //Bepaal minimal enclosing circle en teken hem op blurredImage
                         MatOfPoint2f contour2f = new MatOfPoint2f( contours.get(i).toArray() );                            
                         Imgproc.minEnclosingCircle(contour2f, center, radius);
                         int radiusInt = Math.round(radius[0]);
-                        Imgproc.circle(blurredImage, center, radiusInt, new Scalar( 255,0 , 0 ));
+                        Imgproc.circle(image, center, radiusInt, new Scalar( 255,0 , 0 ));
                 }
         }
         
         displayImage( Mat2BufferedImage(mask));
-        displayImage( Mat2BufferedImage(blurredImage));
+        displayImage( Mat2BufferedImage(image));
         System.out.println(distanceToObject(2*radius[0]));
         System.out.println(horizontalAngle(center));
     }
 
-	public void step(){
-		
-		
-		
-	}
+
 	
-	
-//	public static void main(String[] args){
+//public static void main(String[] args){
 //        
 //        try {
 //        	//Laad de openCV library in
 //            System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
 //            
 //            //Maak images aan
-//            Mat blurredImage = new Mat();
 //            Mat hsvImage = new Mat();
 //            Mat mask = new Mat();
 //            
@@ -112,21 +103,14 @@ public class Beeldherkenning {
 //            Mat image = new Mat(200, 200, CvType.CV_8UC3);
 //            image.put(0, 0, data);
 //            
-//            //byte[] data = Files.readAllBytes(fileLocation);
-//            //byte[] data = java.nio.file.Files.readAllBytes(fileLocation);
-//            //image = Imgcodecs.imdecode(new MatOfByte(data), Imgcodecs.CV_LOAD_IMAGE_UNCHANGED);
-//            
-//            displayImage( Mat2BufferedImage(image));
-//            // remove some noise
-//            Imgproc.blur(image, blurredImage, new Size(7, 7));
 //            
 //            // convert the frame to HSV
-//            Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
-//            displayImage( Mat2BufferedImage(blurredImage));
+//            Imgproc.cvtColor(image, hsvImage, Imgproc.COLOR_BGR2HSV);
+//            displayImage( Mat2BufferedImage(image));
 //            
 //            //Zoek kleur tussen deze ranges (rood)
-//            Scalar minValues = new Scalar(0,0,0);
-//            Scalar maxValues = new Scalar(180,255,250);
+//            Scalar minValues = new Scalar(0,100,100);
+//            Scalar maxValues = new Scalar(10,255,255);
 //            Core.inRange(hsvImage, minValues, maxValues, mask);
 //            
 //            List<MatOfPoint> contours = new ArrayList<>();
@@ -134,7 +118,7 @@ public class Beeldherkenning {
 //            //Schrijft de mask in een folder
 //            //Imgcodecs.imwrite("mask.jpg", mask);
 //            
-//            //Radius en centrum van de minimaal insluitende cirkel
+//            //Radius en 
 //            float[] radius = new float[1];
 //			Point center = new Point();
 //        
@@ -146,17 +130,17 @@ public class Beeldherkenning {
 //                    for (int idx = 0; idx >= 0; idx = (int) hierarchy.get(0, idx)[0])
 //                    {
 //                    		//Teken de contouren in blauw
-//                            Imgproc.drawContours(blurredImage, contours, idx, new Scalar(255, 0, 0));
+//                            Imgproc.drawContours(image, contours, idx, new Scalar(255, 0, 0));
 //                            //Bepaal minimal enclosing circle en teken hem op blurredImage
 //                            MatOfPoint2f contour2f = new MatOfPoint2f( contours.get(idx).toArray() );                            
 //                            Imgproc.minEnclosingCircle(contour2f, center, radius);
 //                            int radiusInt = Math.round(radius[0]);
-//                            Imgproc.circle(blurredImage, center, radiusInt, new Scalar( 255,0 , 0 ));
+//                            Imgproc.circle(image, center, radiusInt, new Scalar( 255,0 , 0 ));
 //                    }
 //            }
 //            
 //            displayImage( Mat2BufferedImage(mask));
-//            displayImage( Mat2BufferedImage(blurredImage));
+//            displayImage( Mat2BufferedImage(image));
 //            System.out.println(distanceToObject(2*radius[0]));
 //            System.out.println(horizontalAngle(center));
 //        }
@@ -170,7 +154,7 @@ public class Beeldherkenning {
 	//Bereken afstand van een object tot de camera
 	public float distanceToObject(float objectHeightOnSensor){
 		System.out.println(objectHeightOnSensor);
-		return objectSize / objectHeightOnSensor * focalLength;
+		return objectSize / (objectHeightOnSensor * focalLength);
 		
 	}
 	
