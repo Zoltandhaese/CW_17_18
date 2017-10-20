@@ -1,6 +1,7 @@
 package testbed;
 
 import API.AutopilotConfig;
+import API.Config;
 
 public class Main {
 
@@ -10,6 +11,10 @@ public class Main {
 	
 	public static void main(String[] args){
 		AutopilotConfig config = new Config();
+		
+	}
+	
+	public simulationStart(){
 		
 	}
 	
