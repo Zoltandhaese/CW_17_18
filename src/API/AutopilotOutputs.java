@@ -1,4 +1,4 @@
-package p_en_o_cw_2017;
+package API;
 
 public interface AutopilotOutputs {
     float getThrust();
